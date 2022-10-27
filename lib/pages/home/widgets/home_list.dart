@@ -12,16 +12,21 @@ class HomeList extends StatelessWidget {
     return GetBuilder<HomeController>(
       id: 'lectores',
       builder: (_) {
-      return ListView.builder(
-        itemBuilder: (context, index) {
-          final Lector lector = _.lectores[index];
-          return ListTile(
-            title: Text(lector.nombres),
-            subtitle: Text(lector.apellidos),
-          );
-        },
-        itemCount: _.lectores.length,
-      );
-    });
+        if (_.loading) {
+          return Center(child: LinearProgressIndicator());
+        }
+        return ListView.builder(
+          itemBuilder: (context, index) {
+            final Lector lector = _.lectores[index];
+            return ListTile(
+              title: Text(lector.nombres),
+              subtitle: Text(lector.apellidos),
+              onTap: () => _.showLectorProfile(lector),
+            );
+          },
+          itemCount: _.lectores.length,
+        );
+      },
+    );
   }
 }
