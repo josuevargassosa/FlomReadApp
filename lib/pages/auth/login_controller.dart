@@ -5,18 +5,23 @@ import 'package:get/route_manager.dart';
 import '../home/home_page.dart';
 
 class LoginController extends GetxController {
-  String _inputText = "";
+  String _inputCorreo = "";
+  String _inputClave = "";
 
-  void onInputTextChanged(String text) {
-    _inputText = text;
+  void onInputCorreoChanged(String text) {
+    _inputCorreo = text;
+  }
+
+  void onInputClaveChanged(String text) {
+    _inputClave = text;
   }
 
   void goToBackWithData() {
-    if (_inputText.trim().isNotEmpty) {
+    if (_inputCorreo.trim().isNotEmpty && _inputClave.trim().isNotEmpty) {
       Get.to(const HomePage());
     } else {
       Get.dialog(const AlertDialog(
-          title: Text("Error"), content: Text("Ingrese un valor valido")));
+          title: Text("Error"), content: Text("Ingrese correo y clave")));
     }
   }
 }

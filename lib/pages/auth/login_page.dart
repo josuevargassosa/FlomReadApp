@@ -65,7 +65,7 @@ class LoginPage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * 0.8,
                 height: 40,
                 child: CupertinoTextField(
-                  onChanged: _.onInputTextChanged,
+                  onChanged: _.onInputCorreoChanged,
                 ),
               ),
 
@@ -90,7 +90,7 @@ class LoginPage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * 0.8,
                 height: 40,
                 child: CupertinoTextField(
-                  onChanged: _.onInputTextChanged,
+                  onChanged: _.onInputClaveChanged,
                 ),
               ),
               const SizedBox(height: 30),
