@@ -1,47 +1,65 @@
+// To parse this JSON data, do
+//
+//     final lector = lectorFromMap(jsonString);
 
-import 'package:meta/meta.dart' show required;
+import 'dart:convert';
 
 class Lector {
-  final int id;
-  final String nombres;
-  final String apellidos;
-  final identificacion;
-  final String correo;
-  final int edad;
-  final String grado;
-  final fotoPerfil;
-  final estado;
-  final sexo;
+    Lector({
+        this.id,
+        this.nombres,
+        this.apellidos,
+        this.identificacion,
+        this.edad,
+        this.correo,
+        this.grado,
+        this.fotoPerfil,
+        this.estado,
+        this.sexo,
+        this.institucion,
+    });
 
-  Lector(
-    {
-      required this.id,
-      required this.nombres,
-      required this.apellidos,
-      required this.identificacion,
-      required this.edad,
-      required this.correo,
-      required this.grado,
-      required this.fotoPerfil,
-      required this.estado,
-      required this.sexo
-    }
-  );
+    int? id;
+    String? nombres;
+    String? apellidos;
+    String? identificacion;
+    int? edad;
+    String? correo;
+    String? grado;
+    String? fotoPerfil;
+    String? estado;
+    String? sexo;
+    String? institucion;
 
-  static Lector FromJson(Map<String, dynamic>json) {
-    return Lector(
-      id: json['id'],
-      nombres: json['nombres'],
-      apellidos: json['apellidos'],
-      identificacion: json['identificacion'],
-      edad: json['edad'],
-      correo: json['correo'],
-      grado: json['grado'],
-      fotoPerfil: json['fotoPerfil'],
-      estado: json['estado'],
-      sexo: json['sexo']
+    factory Lector.fromJson(String str) => Lector.fromMap(json.decode(str));
+
+    String toJson() => json.encode(toMap());
+
+    factory Lector.fromMap(Map<String, dynamic> json) => Lector(
+        id: json["id"],
+        nombres: json["nombres"],
+        apellidos: json["apellidos"],
+        identificacion: json["identificacion"],
+        edad: json["edad"],
+        correo: json["correo"],
+        grado: json["grado"],
+        fotoPerfil: json["fotoPerfil"],
+        estado: json["estado"],
+        sexo: json["sexo"],
+        institucion: json["institucion"],
     );
-  }
 
-
+    Map<String, dynamic> toMap() => {
+        "id": id,
+        "nombres": nombres,
+        "apellidos": apellidos,
+        "identificacion": identificacion,
+        "edad": edad,
+        "correo": correo,
+        "grado": grado,
+        "fotoPerfil": fotoPerfil,
+        "estado": estado,
+        "sexo": sexo,
+        "institucion": institucion,
+    };
 }

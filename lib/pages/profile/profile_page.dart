@@ -23,7 +23,7 @@ class ProfilePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(_.lector.nombres),
+              Text(_.lector.nombres!),
               SizedBox(height: 10),
               CupertinoTextField(
                 onChanged: _.onInputTextChanged,

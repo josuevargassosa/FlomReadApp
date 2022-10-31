@@ -19,8 +19,8 @@ class HomeList extends StatelessWidget {
           itemBuilder: (context, index) {
             final Lector lector = _.lectores[index];
             return ListTile(
-              title: Text(lector.nombres),
-              subtitle: Text(lector.apellidos),
+              title: Text(lector.nombres!),
+              subtitle: Text(lector.apellidos!),
               onTap: () => _.showLectorProfile(lector),
             );
           },

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
 import 'package:get/route_manager.dart';
 
+import '../../core/api/lector_api.dart';
 import '../../core/models/lector_model.dart';
 
 class ProfileController extends GetxController {
@@ -16,6 +17,8 @@ class ProfileController extends GetxController {
   void onInit() {
     super.onInit();
     this._lector = Get.arguments as Lector;
+    final dataLector = LectorAPI.instance.getLectorById(1);
+    print(dataLector);
   }
 
 

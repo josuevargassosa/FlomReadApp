@@ -2,8 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../models/lector_model.dart';
 
-class LectorAPI { 
-
+class LectorAPI {
   LectorAPI._internal();
 
   static LectorAPI _instance = LectorAPI._internal();
@@ -13,15 +12,24 @@ class LectorAPI {
   final _dio = Dio();
 
   Future<List<Lector>> getLectores() async {
-      final Response response = await _dio.get('http://192.168.100.32:4000/lector',
-        queryParameters: {
-          "delay": 4,
-        }
-      );
-      return (response.data as List)
-      .map((e) => Lector.FromJson(e))
-      .toList();
+    final Response response =
+        await _dio.get('http://192.168.100.32:4000/lector', queryParameters: {
+      "delay": 4,
+    });
+    return (response.data as List).map((e) => Lector.fromMap(e)).toList();
   }
 
+  Future<Lector> getLectorById(int idLector) async {
+    final Response response = await _dio.get(
+      'http://192.168.100.32:4000/lector/$idLector',
+    );
+    return (Lector.fromMap(response.data));
+  }
 
+  Future<Lector> getPrestamosByLector(int idLector) async {
+    final Response response = await _dio.get(
+      'http://192.168.100.32:4000/lector/$idLector',
+    );
+    return (Lector.fromMap(response.data));
+  }
 }

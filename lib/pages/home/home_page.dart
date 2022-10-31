@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
       init: HomeController(), // intialize with the Controller
-      builder: (value) => Scaffold(
+      builder: (_) => Scaffold(
         //DOS COLUMNAS
         backgroundColor: const Color.fromARGB(255, 236, 235, 235),
         body: Column(
@@ -18,13 +18,13 @@ class HomePage extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            header(context),
-            tabs(value, context),
+            header(context, _),
+            tabs(_, context),
             const SizedBox(
               height: 10,
             ),
             Obx(
-              () => value.indexSegment.value == 0
+              () => _.indexSegment.value == 0
                   ? Expanded(
                       child: ListView.builder(
                           shrinkWrap: true,
@@ -37,7 +37,7 @@ class HomePage extends StatelessWidget {
                                 onTap: () => {print(index)});
                           }),
                     )
-                  : value.indexSegment.value == 1
+                  : _.indexSegment.value == 1
                       ? Expanded(
                           child: ListView.builder(
                               physics: AlwaysScrollableScrollPhysics(),
@@ -89,7 +89,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget header(context) {
+  Widget header(context, controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
       child: Container(
@@ -112,27 +112,29 @@ class HomePage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Gabriela Bermeo',
+                      //Nombres
+                      Text('${controller.lector.nombres} ${controller.lector.apellidos}',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: Get.width * 0.08)),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 20),
                       const Text(
-                        'Tipo',
+                        'Nivel',
                         style: TextStyle(
                             color: Color.fromARGB(255, 111, 111, 111)),
                       ),
+                      //Nivel
                       Text('Becario',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: Get.width * 0.035)),
                       const SizedBox(height: 20),
                       const Text(
-                        'Colegio',
+                        'Institución',
                         style: TextStyle(
                             color: Color.fromARGB(255, 111, 111, 111)),
                       ),
-                      Text('Liceo Panamericano',
+                      Text(controller.lector.institucion.toString(),
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: Get.width * 0.035)),

@@ -11,14 +11,19 @@ class HomeController extends GetxController {
   RxInt indexSegment = 0.obs;
   List<Lector> _lectores = [];
   bool _loading = true;
+  Lector _lector = new Lector();
+
+
   bool get loading => _loading;
   int get counter => _counter;
   List<Lector> get lectores => _lectores;
-  TabController? tabController;
+  Lector get lector => _lector; 
+
 
   @override
   void onInit() {
     super.onInit();
+    loadLectoresById();
   }
 
   @override
@@ -38,6 +43,14 @@ class HomeController extends GetxController {
     // _lectores = await data;
     // _loading = false;
     // update(['lectores']);
+  }
+
+    Future<void> loadLectoresById() async {
+    final data = await LectorAPI.instance.getLectorById(1);
+    _lector = data;
+    // _lectores = await data;
+    // _loading = false;
+    update();
   }
 
   showLectorProfile(Lector lector) {
