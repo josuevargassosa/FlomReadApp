@@ -1,5 +1,4 @@
 import 'package:flomreadapp/core/api/lector_api.dart';
-import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
 import 'package:get/route_manager.dart';
 
@@ -10,27 +9,24 @@ class HomeController extends GetxController {
   int _counter = 0;
   RxInt indexSegment = 0.obs;
   List<Lector> _lectores = [];
-  bool _loading = true;
-  Lector _lector = new Lector();
-
+  final bool _loading = true;
+  late Lector _lector = Lector();
 
   bool get loading => _loading;
   int get counter => _counter;
   List<Lector> get lectores => _lectores;
-  Lector get lector => _lector; 
-
+  Lector get lector => _lector;
 
   @override
   void onInit() {
     super.onInit();
-    loadLectoresById();
+    // loadLectoresById();
   }
 
   @override
   void onReady() {
     super.onReady();
-    print("aaaaa");
-    loadLectores();
+    // loadLectores();
   }
 
   void increment() {
@@ -39,13 +35,13 @@ class HomeController extends GetxController {
   }
 
   Future<void> loadLectores() async {
-    // final data = LectorAPI.instance.getLectores();
-    // _lectores = await data;
+    final data = LectorAPI.instance.getLectores();
+    _lectores = await data;
     // _loading = false;
     // update(['lectores']);
   }
 
-    Future<void> loadLectoresById() async {
+  Future<void> loadLectoresById() async {
     final data = await LectorAPI.instance.getLectorById(1);
     _lector = data;
     // _lectores = await data;

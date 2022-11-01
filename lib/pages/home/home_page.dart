@@ -1,4 +1,5 @@
 import 'package:flomreadapp/pages/home/home_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:animated_segmented_tab_control/animated_segmented_tab_control.dart';
@@ -65,30 +66,6 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget tabs(value, context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50),
-      child: DefaultTabController(
-          length: 3,
-          child: Builder(builder: (BuildContext context) {
-            DefaultTabController.of(context)?.addListener(() {
-              value.indexSegment.value =
-                  (DefaultTabController.of(context)!.index);
-            });
-            return const SegmentedTabControl(
-              backgroundColor: Color.fromARGB(255, 227, 227, 227),
-              indicatorColor: Color.fromARGB(255, 255, 142, 12),
-              tabTextColor: Color.fromARGB(255, 55, 55, 55),
-              tabs: [
-                SegmentTab(label: "Mis libros"),
-                SegmentTab(label: "Leidos"),
-                SegmentTab(label: "Sin leer")
-              ],
-            );
-          })),
-    );
-  }
-
   Widget header(context, controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
@@ -113,7 +90,8 @@ class HomePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       //Nombres
-                      Text('${controller.lector.nombres} ${controller.lector.apellidos}',
+                      Text(
+                          '${controller.lector.nombres} ${controller.lector.apellidos}',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: Get.width * 0.08)),
@@ -161,41 +139,172 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget lista(context, lector) {
+  Widget tabs(value, context) {
     return Padding(
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.symmetric(horizontal: 50),
+      child: DefaultTabController(
+          length: 3,
+          child: Builder(builder: (BuildContext context) {
+            DefaultTabController.of(context)?.addListener(() {
+              value.indexSegment.value =
+                  (DefaultTabController.of(context)!.index);
+            });
+            return const SegmentedTabControl(
+              backgroundColor: Color.fromARGB(255, 227, 227, 227),
+              indicatorColor: Color.fromARGB(255, 255, 142, 12),
+              tabTextColor: Color.fromARGB(255, 55, 55, 55),
+              tabs: [
+                SegmentTab(label: "Mis libros"),
+                SegmentTab(label: "Leidos"),
+                SegmentTab(label: "Sin leer")
+              ],
+            );
+          })),
+    );
+  }
+
+  Widget lista(context, lector) {
+    return GestureDetector(
+      onTap: () => {
+        Comentario(context, lector),
+      },
       child: Container(
         width: Get.width * 0.9,
-        color: Color.fromARGB(255, 236, 235, 235),
-        child: Row(
-          //HEADER
-          children: [
-            Container(
-              height: 120,
-              width: MediaQuery.of(context).size.width * 0.3,
-              decoration: BoxDecoration(
-                image: const DecorationImage(
-                  image: NetworkImage(
-                      'https://img.freepik.com/foto-gratis/feliz-joven-estudiante-sosteniendo-cuadernos-cursos-sonriendo-camara-pie-ropa-primavera-sobre-fondo-azul_1258-70161.jpg?w=2000'),
-                  fit: BoxFit.cover,
+        color: const Color.fromARGB(255, 236, 235, 235),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Container(
+                height: 120,
+                width: MediaQuery.of(context).size.width * 0.3,
+                decoration: BoxDecoration(
+                  image: const DecorationImage(
+                    image: NetworkImage(
+                        'https://img.freepik.com/foto-gratis/feliz-joven-estudiante-sosteniendo-cuadernos-cursos-sonriendo-camara-pie-ropa-primavera-sobre-fondo-azul_1258-70161.jpg?w=2000'),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                borderRadius: BorderRadius.circular(20),
               ),
-            ),
-            SizedBox(width: 10),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(lector, style: TextStyle(fontWeight: FontWeight.bold)),
-                const Text('Becario',
-                    style:
-                        TextStyle(color: Color.fromARGB(255, 104, 104, 104))),
-              ],
-            ),
-          ],
+              const SizedBox(width: 10),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(lector,
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  const Text('Becario',
+                      style:
+                          TextStyle(color: Color.fromARGB(255, 104, 104, 104))),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Comentario(context, lector) async {
+    await showModalBottomSheet<void>(
+      shape: ShapeBorder.lerp(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          1),
+      isScrollControlled: true,
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 247, 247, 247),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          height: Get.height * 0.7,
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(lector.toString(),
+                    style: TextStyle(
+                        fontSize: Get.width * 0.08,
+                        fontWeight: FontWeight.bold)),
+                SizedBox(height: Get.height * 0.02),
+                CupertinoTextField(
+                  maxLength: 1000,
+                  minLines: 20,
+                  placeholder: 'Comentario',
+                  maxLines: 20,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                SizedBox(height: Get.height * 0.02),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    MaterialButton(
+                      color: Colors.red,
+                      shape: ShapeBorder.lerp(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          1),
+                      child: Row(
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 5.0),
+                            child: Text(
+                              'Cancelar',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          Icon(Icons.cancel, color: Colors.white),
+                        ],
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    MaterialButton(
+                      color: Colors.green,
+                      shape: ShapeBorder.lerp(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          1),
+                      child: Row(
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 5.0),
+                            child: Text(
+                              'Enviar',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          Icon(Icons.save, color: Colors.white),
+                        ],
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
