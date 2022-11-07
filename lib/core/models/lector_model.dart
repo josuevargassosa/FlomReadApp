@@ -32,7 +32,7 @@ class Lector {
     String? institucion;
 
     factory Lector.fromJson(String str) => Lector.fromMap(json.decode(str));
-
+ 
     String toJson() => json.encode(toMap());
 
     factory Lector.fromMap(Map<String, dynamic> json) => Lector(

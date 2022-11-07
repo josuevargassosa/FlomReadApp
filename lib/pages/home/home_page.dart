@@ -31,22 +31,20 @@ class HomePage extends StatelessWidget {
                           shrinkWrap: true,
                           physics: AlwaysScrollableScrollPhysics(),
                           padding: const EdgeInsets.all(8),
-                          itemCount: 6,
+                          itemCount: _.prestamos.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return GestureDetector(
-                                child: lista(context, "Josue"),
-                                onTap: () => {print(index)});
-                          }),
-                    )
+                            return lista(context, _.prestamos[index], _);
+                            },
+                    ))
                   : _.indexSegment.value == 1
                       ? Expanded(
                           child: ListView.builder(
                               physics: AlwaysScrollableScrollPhysics(),
                               shrinkWrap: true,
                               padding: const EdgeInsets.all(8),
-                              itemCount: 5,
+                              itemCount: _.prestamosLeidos.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return lista(context, "Xavier");
+                                return lista(context, _.prestamosLeidos[index], _);
                               }),
                         )
                       : Expanded(
@@ -54,9 +52,9 @@ class HomePage extends StatelessWidget {
                               physics: AlwaysScrollableScrollPhysics(),
                               shrinkWrap: true,
                               padding: const EdgeInsets.all(8),
-                              itemCount: 7,
+                              itemCount: _.prestamosSin.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return lista(context, "Luis");
+                                return lista(context, _.prestamosSin[index], _);
                               }),
                         ),
             ),
@@ -102,7 +100,7 @@ class HomePage extends StatelessWidget {
                             color: Color.fromARGB(255, 111, 111, 111)),
                       ),
                       //Nivel
-                      Text('Becario',
+                      Text(controller.lector.grado,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: Get.width * 0.035)),
@@ -126,7 +124,7 @@ class HomePage extends StatelessWidget {
                 decoration: BoxDecoration(
                   image: const DecorationImage(
                     image: NetworkImage(
-                        'https://img.freepik.com/foto-gratis/feliz-joven-estudiante-sosteniendo-cuadernos-cursos-sonriendo-camara-pie-ropa-primavera-sobre-fondo-azul_1258-70161.jpg?w=2000'),
+                        'https://previews.123rf.com/images/dolgachov/dolgachov1711/dolgachov171101175/89513306-ni%C3%B1o-estudiante-feliz-escribiendo-en-el-cuaderno-en-casa.jpg'),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.circular(20),
@@ -163,10 +161,10 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget lista(context, lector) {
+  Widget lista(context, prestamo, HomeController homeController ) {
     return GestureDetector(
       onTap: () => {
-        Comentario(context, lector),
+        Comentario(context, prestamo, homeController),
       },
       child: Container(
         width: Get.width * 0.9,
@@ -179,10 +177,10 @@ class HomePage extends StatelessWidget {
                 height: 120,
                 width: MediaQuery.of(context).size.width * 0.3,
                 decoration: BoxDecoration(
-                  image: const DecorationImage(
-                    image: NetworkImage(
-                        'https://img.freepik.com/foto-gratis/feliz-joven-estudiante-sosteniendo-cuadernos-cursos-sonriendo-camara-pie-ropa-primavera-sobre-fondo-azul_1258-70161.jpg?w=2000'),
+                  image: DecorationImage(
+                    image: NetworkImage(prestamo.libro.fotoPortada != '' ? prestamo.libro.fotoPortada : 'https://img.freepik.com/foto-gratis/feliz-joven-estudiante-sosteniendo-cuadernos-cursos-sonriendo-camara-pie-ropa-primavera-sobre-fondo-azul_1258-70161.jpg?w=2000'),
                     fit: BoxFit.cover,
+                    scale: 1.0
                   ),
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -192,9 +190,9 @@ class HomePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(lector,
+                  Text(prestamo.libro.nombre,
                       style: const TextStyle(fontWeight: FontWeight.bold)),
-                  const Text('Becario',
+                  Text(prestamo.libro.autor,
                       style:
                           TextStyle(color: Color.fromARGB(255, 104, 104, 104))),
                 ],
@@ -206,7 +204,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Comentario(context, lector) async {
+  Comentario(context, prestamo, HomeController homeController) async {
     await showModalBottomSheet<void>(
       shape: ShapeBorder.lerp(
           RoundedRectangleBorder(
@@ -231,12 +229,14 @@ class HomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(lector.toString(),
+                Text(prestamo.libro.nombre.toString(),
                     style: TextStyle(
                         fontSize: Get.width * 0.08,
                         fontWeight: FontWeight.bold)),
                 SizedBox(height: Get.height * 0.02),
                 CupertinoTextField(
+                  textInputAction: TextInputAction.next,
+                  onChanged: (value) => {homeController.setDescripcion(value)},
                   maxLength: 1000,
                   minLines: 20,
                   placeholder: 'Comentario',
@@ -296,7 +296,10 @@ class HomePage extends StatelessWidget {
                           Icon(Icons.save, color: Colors.white),
                         ],
                       ),
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => {
+                        homeController.postComentario(prestamo),
+                        Navigator.pop(context),
+                      },
                     ),
                   ],
                 ),

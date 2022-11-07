@@ -108,6 +108,8 @@ class LoginPage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   )),
+                  
+              Text(_.mensajeError),
             ],
           ),
         ),
