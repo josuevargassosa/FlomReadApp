@@ -96,7 +96,7 @@ class LoginPage extends StatelessWidget {
               const SizedBox(height: 30),
               Container(
                   width: MediaQuery.of(context).size.width * 0.8,
-                  height: 50,
+                  height: 55,
                   decoration: BoxDecoration(
                     color: Colors.red,
                     borderRadius: BorderRadius.circular(10),

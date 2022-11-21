@@ -8,10 +8,12 @@ class authAPI {
   static authAPI get instance => _instance;
 
   final _dio = Dio();
+  //final urlApi = "http://192.168.100.32:3000";
+  final urlApi = "https://flomreadmysqlbackend-production.up.railway.app";
 
   Future<List<dynamic>> auth() async {
     final Response response =
-        await _dio.get('http://192.168.100.32:4000/lector', queryParameters: {
+        await _dio.get('$urlApi/lector', queryParameters: {
       "delay": 4,
     });
     return (response.data as List);

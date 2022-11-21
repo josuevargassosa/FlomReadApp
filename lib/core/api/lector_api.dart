@@ -9,15 +9,17 @@ import '../models/libro_model.dart';
 class LectorAPI {
   LectorAPI._internal();
 
-  static LectorAPI _instance = LectorAPI._internal();
+  static final LectorAPI _instance = LectorAPI._internal();
 
   static LectorAPI get instance => _instance;
 
+  final urlApi = "http://192.168.100.32:3000";
+  //final urlApi = "https://flomreadmysqlbackend-production.up.railway.app";
   final _dio = Dio();
 
   Future<List<Lector>> getLectores() async {
     final Response response =
-        await _dio.get('http://192.168.100.32:4000/lector', queryParameters: {
+        await _dio.get('$urlApi/lector', queryParameters: {
       "delay": 4,
     });
     return (response.data as List).map((e) => Lector.fromMap(e)).toList();
@@ -25,42 +27,39 @@ class LectorAPI {
 
   Future<Lector> getLectorById(int idLector) async {
     final Response response = await _dio.get(
-      'http://192.168.100.32:4000/lector/$idLector',
+      '$urlApi/lector/$idLector',
     );
     return (Lector.fromMap(response.data));
   }
 
   Future<Lector> getPrestamosByLector(int idLector) async {
     final Response response = await _dio.get(
-      'http://192.168.100.32:4000/lector/$idLector',
+      '$urlApi/lector/$idLector',
     );
     return (Lector.fromMap(response.data));
   }
 
   Future<Lector> login(Credentials credential) async {
-    final response = await _dio.post('http://192.168.100.32:4000/auth/login-lector' , data: {
+    final response = await _dio.post('$urlApi/auth/login-lector' , data: {
       "correo": credential.correo,
       "clave": credential.clave
     });
 
     return Lector.fromMap(response.data['data']);
-    // if (response.data == 'Clave incorrecta') {
-    //   return response.data;
-    // } else {
-    //   return (Lector.fromMap(response.data));
-    // }
   }
 
 
   Future<List<Prestamo>> prestamosByIdLector(int idLector) async {
-    final response = await _dio.get('http://192.168.100.32:4000/LibroLector/$idLector');
+    final response = await _dio.get('$urlApi/LibroLector/$idLector');
     //return (Prestamo.fromMap(response.data));
     return (response.data as List).map((e) => Prestamo.fromMap(e)).toList();
   }
 
   Future<Comentario> postComentario(Comentario comentario) async {
-    final response = await _dio.post('http://192.168.100.32:4000/Comentario' , data: {
+    final response = await _dio.post('$urlApi/Comentario' , data: {
       "idLibroLector": comentario.idLibroLector,
+      "idLector": comentario.idLector,
+      "idLibro": comentario.idLibro,
       "descripcion": comentario.descripcion
     });
 

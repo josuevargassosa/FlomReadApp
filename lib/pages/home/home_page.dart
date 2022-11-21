@@ -92,7 +92,7 @@ class HomePage extends StatelessWidget {
                           '${controller.lector.nombres} ${controller.lector.apellidos}',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: Get.width * 0.08)),
+                              fontSize: Get.width * 0.06)),
                       const SizedBox(height: 20),
                       const Text(
                         'Nivel',

@@ -29,6 +29,7 @@ class LoginController extends GetxController {
   void goToBackWithData() {
     if (_inputCorreo.trim().isNotEmpty && _inputClave.trim().isNotEmpty) {
       //Get.to(const HomePage());
+      print("Correo: $_inputCorreo Clave: $_inputClave");
       _credentials = Credentials(correo: _inputCorreo, clave: _inputClave);
       login(_credentials);
     } else {
