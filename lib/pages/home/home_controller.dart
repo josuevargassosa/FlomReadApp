@@ -41,6 +41,13 @@ class HomeController extends GetxController {
     super.onReady();
   }
 
+  loadDataArgument() {
+    print('ENTROOOO');
+    _lector = Get.arguments;
+    loadPrestamos();
+    update();
+  }
+
   void loadPrestamosLeidos() {
     var data = _prestamos.where((e) => e.estado == 'L');
     _prestamosLeidos.addAll(data);
@@ -69,7 +76,7 @@ class HomeController extends GetxController {
     Comentario comentario = Comentario(
       idLibroLector: prestamo.id,
       descripcion: _descripcion,
-      idLector: prestamo.idLector, 
+      idLector: prestamo.idLector,
       idLibro: prestamo.idLibro,
     );
     final data = await LectorAPI.instance.postComentario(comentario);

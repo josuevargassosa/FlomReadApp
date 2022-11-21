@@ -1,3 +1,4 @@
+import 'package:flomreadapp/pages/auth/login_page.dart';
 import 'package:flomreadapp/pages/home/home_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +11,23 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
-      init: HomeController(), // intialize with the Controller
+      init: HomeController(),
+      // intialize with the Controller
       builder: (_) => Scaffold(
         //DOS COLUMNAS
         backgroundColor: const Color.fromARGB(255, 236, 235, 235),
         body: Column(
           children: [
+            const SizedBox(
+              height: 30,
+            ),
+            Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                  onPressed: () => {Get.offAll(const LoginPage())},
+                  icon:
+                      const Icon(Icons.logout, color: Colors.black, size: 30)),
+            ),
             const SizedBox(
               height: 10,
             ),
@@ -28,13 +40,13 @@ class HomePage extends StatelessWidget {
               () => _.indexSegment.value == 0
                   ? Expanded(
                       child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: AlwaysScrollableScrollPhysics(),
-                          padding: const EdgeInsets.all(8),
-                          itemCount: _.prestamos.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return lista(context, _.prestamos[index], _);
-                            },
+                      shrinkWrap: true,
+                      physics: AlwaysScrollableScrollPhysics(),
+                      padding: const EdgeInsets.all(8),
+                      itemCount: _.prestamos.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return lista(context, _.prestamos[index], _);
+                      },
                     ))
                   : _.indexSegment.value == 1
                       ? Expanded(
@@ -44,7 +56,8 @@ class HomePage extends StatelessWidget {
                               padding: const EdgeInsets.all(8),
                               itemCount: _.prestamosLeidos.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return lista(context, _.prestamosLeidos[index], _);
+                                return lista(
+                                    context, _.prestamosLeidos[index], _);
                               }),
                         )
                       : Expanded(
@@ -66,7 +79,7 @@ class HomePage extends StatelessWidget {
 
   Widget header(context, controller) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 15),
       child: Container(
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 255, 255, 255),
@@ -161,7 +174,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget lista(context, prestamo, HomeController homeController ) {
+  Widget lista(context, prestamo, HomeController homeController) {
     return GestureDetector(
       onTap: () => {
         Comentario(context, prestamo, homeController),
@@ -178,10 +191,11 @@ class HomePage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * 0.3,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage(prestamo.libro.fotoPortada != '' ? prestamo.libro.fotoPortada : 'https://img.freepik.com/foto-gratis/feliz-joven-estudiante-sosteniendo-cuadernos-cursos-sonriendo-camara-pie-ropa-primavera-sobre-fondo-azul_1258-70161.jpg?w=2000'),
-                    fit: BoxFit.cover,
-                    scale: 1.0
-                  ),
+                      image: NetworkImage(prestamo.libro.fotoPortada != ''
+                          ? prestamo.libro.fotoPortada
+                          : 'https://img.freepik.com/foto-gratis/feliz-joven-estudiante-sosteniendo-cuadernos-cursos-sonriendo-camara-pie-ropa-primavera-sobre-fondo-azul_1258-70161.jpg?w=2000'),
+                      fit: BoxFit.cover,
+                      scale: 1.0),
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),

@@ -13,8 +13,8 @@ class LectorAPI {
 
   static LectorAPI get instance => _instance;
 
-  final urlApi = "http://192.168.100.32:3000";
-  //final urlApi = "https://flomreadmysqlbackend-production.up.railway.app";
+  //final urlApi = "http://192.168.100.32:3000";
+  final urlApi = "https://flomreadmysqlbackend-production.up.railway.app";
   final _dio = Dio();
 
   Future<List<Lector>> getLectores() async {
@@ -40,14 +40,19 @@ class LectorAPI {
   }
 
   Future<Lector> login(Credentials credential) async {
-    final response = await _dio.post('$urlApi/auth/login-lector' , data: {
-      "correo": credential.correo,
-      "clave": credential.clave
-    });
+    try {
+      final Response response = await _dio.post('$urlApi/auth/login-lector',
+          data: {"correo": credential.correo, "clave": credential.clave});
 
-    return Lector.fromMap(response.data['data']);
+      return Lector.fromMap(response.data['data']);
+    } catch (e) {
+      if (e is DioError) {
+        return Future.error(e.response!.data["message"]);
+      } else {
+        return Future.error(e.toString());
+      }
+    }
   }
-
 
   Future<List<Prestamo>> prestamosByIdLector(int idLector) async {
     final response = await _dio.get('$urlApi/LibroLector/$idLector');
@@ -56,7 +61,7 @@ class LectorAPI {
   }
 
   Future<Comentario> postComentario(Comentario comentario) async {
-    final response = await _dio.post('$urlApi/Comentario' , data: {
+    final response = await _dio.post('$urlApi/Comentario', data: {
       "idLibroLector": comentario.idLibroLector,
       "idLector": comentario.idLector,
       "idLibro": comentario.idLibro,
@@ -65,6 +70,4 @@ class LectorAPI {
 
     return Comentario.fromMap(response.data);
   }
-
-
 }

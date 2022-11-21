@@ -94,6 +94,11 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 30),
+              Text(_.loginMessageFail,
+                  style: const TextStyle(
+                    color: Color.fromARGB(255, 255, 0, 0),
+                  )),
+              const SizedBox(height: 30),
               Container(
                   width: MediaQuery.of(context).size.width * 0.8,
                   height: 55,
@@ -108,7 +113,7 @@ class LoginPage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   )),
-                  
+
               Text(_.mensajeError),
             ],
           ),

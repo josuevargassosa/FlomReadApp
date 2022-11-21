@@ -15,8 +15,10 @@ class LoginController extends GetxController {
   late Credentials _credentials;
   String mensajeError = "";
   late Lector lector;
+  String _loginMessageFail = "";
 
   Credentials get credentials => _credentials;
+  String get loginMessageFail => _loginMessageFail;
 
   void onInputCorreoChanged(String text) {
     _inputCorreo = text;
@@ -39,15 +41,13 @@ class LoginController extends GetxController {
   }
 
   Future<void> login(Credentials credencial) async {
-    final data = await LectorAPI.instance.login(credencial);
-    inspect(data);
-    // lector = data['lectorFind'];
-    Get.to(HomePage(), arguments: data);
-    // if (data == String) {
-    //   mensajeError = data.toString();
-    // } else {
-    //   print(data);
-    // }
-    // _credentials = Credentials(correo: credencial.correo, clave: credencial.clave);
+    try {
+      final data = await LectorAPI.instance.login(credencial);
+      Get.to(const HomePage(), arguments: data);
+    } catch (e) {
+      print(e);
+      _loginMessageFail = e.toString();
+      update();
+    }
   }
 }
