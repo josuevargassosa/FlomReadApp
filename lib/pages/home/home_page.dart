@@ -135,9 +135,10 @@ class HomePage extends StatelessWidget {
                 height: 220,
                 width: MediaQuery.of(context).size.width * 0.4,
                 decoration: BoxDecoration(
-                  image: const DecorationImage(
-                    image: NetworkImage(
-                        'https://previews.123rf.com/images/dolgachov/dolgachov1711/dolgachov171101175/89513306-ni%C3%B1o-estudiante-feliz-escribiendo-en-el-cuaderno-en-casa.jpg'),
+                  image: DecorationImage(
+                    image: NetworkImage(controller.lector.fotoPerfil != ''
+                        ? controller.lector.fotoPerfil
+                        : 'https://previews.123rf.com/images/dolgachov/dolgachov1711/dolgachov171101175/89513306-ni%C3%B1o-estudiante-feliz-escribiendo-en-el-cuaderno-en-casa.jpg'),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.circular(20),

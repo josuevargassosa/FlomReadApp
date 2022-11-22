@@ -7,7 +7,6 @@ import 'package:get/route_manager.dart';
 import '../../core/models/comentario_model.dart';
 import '../../core/models/lector_model.dart';
 import '../../core/models/libro_model.dart';
-import '../profile/profile_page.dart';
 
 class HomeController extends GetxController {
   int _counter = 0;
@@ -89,10 +88,10 @@ class HomeController extends GetxController {
     update();
   }
 
-  showLectorProfile(Lector lector) {
-    Get.to(
-      const ProfilePage(),
-      arguments: lector,
-    );
-  }
+  // showLectorProfile(Lector lector) {
+  //   Get.to(
+  //     const ProfilePage(),
+  //     arguments: lector,
+  //   );
+  // }
 }

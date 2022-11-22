@@ -16,8 +16,7 @@ class LoginPage extends StatelessWidget {
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: const NetworkImage(
-                  'https://img.freepik.com/fotos-premium/estudiantes-felices-leyendo-libro-biblioteca-juntos_123211-2200.jpg'),
+              image: const AssetImage('assets/img/loginBackground.png'),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.5), BlendMode.darken),

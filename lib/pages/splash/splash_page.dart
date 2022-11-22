@@ -13,12 +13,11 @@ class SplashPage extends StatelessWidget {
       },
       init: SplashController(),
       initState: (_) {},
-      builder: (_)  => const Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
+      builder: (_) => const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
     );
   }
 }
-
