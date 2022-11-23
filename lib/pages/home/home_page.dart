@@ -136,7 +136,8 @@ class HomePage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * 0.4,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage(controller.lector.fotoPerfil != ''
+                    image: NetworkImage(controller.lector.fotoPerfil != '' &&
+                            controller.lector.fotoPerfil != null
                         ? controller.lector.fotoPerfil
                         : 'https://previews.123rf.com/images/dolgachov/dolgachov1711/dolgachov171101175/89513306-ni%C3%B1o-estudiante-feliz-escribiendo-en-el-cuaderno-en-casa.jpg'),
                     fit: BoxFit.cover,
@@ -178,6 +179,7 @@ class HomePage extends StatelessWidget {
   Widget lista(context, prestamo, HomeController homeController) {
     return GestureDetector(
       onTap: () => {
+        homeController.loadComentario(prestamo.id),
         Comentario(context, prestamo, homeController),
       },
       child: Container(
@@ -237,7 +239,7 @@ class HomePage extends StatelessWidget {
             color: Color.fromARGB(255, 247, 247, 247),
             borderRadius: BorderRadius.circular(20),
           ),
-          height: Get.height * 0.7,
+          height: Get.height * 0.8,
           child: Padding(
             padding: const EdgeInsets.all(15),
             child: Column(
@@ -252,7 +254,10 @@ class HomePage extends StatelessWidget {
                 CupertinoTextField(
                   textInputAction: TextInputAction.next,
                   onChanged: (value) => {homeController.setDescripcion(value)},
-                  maxLength: 1000,
+                  controller: (homeController.showButton == false
+                      ? homeController.descripcionController
+                      : null),
+                  maxLength: 900,
                   minLines: 20,
                   placeholder: 'Comentario',
                   maxLines: 20,
@@ -289,31 +294,39 @@ class HomePage extends StatelessWidget {
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
-                    MaterialButton(
-                      color: Colors.green,
-                      shape: ShapeBorder.lerp(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          1),
-                      child: Row(
-                        children: const [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 5.0),
-                            child: Text(
-                              'Enviar',
-                              style: TextStyle(color: Colors.white),
+                    FutureBuilder(
+                      future: null,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<dynamic> snapshot) {
+                        if (homeController.showButton == true) {
+                          return MaterialButton(
+                            color: Colors.green,
+                            shape: ShapeBorder.lerp(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                1),
+                            child: Row(
+                              children: const [
+                                Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 5.0),
+                                  child: Text(
+                                    'Comentar',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                Icon(Icons.check, color: Colors.white),
+                              ],
                             ),
-                          ),
-                          Icon(Icons.save, color: Colors.white),
-                        ],
-                      ),
-                      onPressed: () => {
-                        homeController.postComentario(prestamo),
-                        Navigator.pop(context),
+                            onPressed: () => Navigator.pop(context),
+                          );
+                        } else {
+                          return Text('');
+                        }
                       },
                     ),
                   ],

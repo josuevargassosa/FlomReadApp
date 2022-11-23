@@ -13,8 +13,8 @@ class LectorAPI {
 
   static LectorAPI get instance => _instance;
 
-  //final urlApi = "http://192.168.100.32:3000";
-  final urlApi = "https://flomreadmysqlbackend-production.up.railway.app";
+  final urlApi = "http://192.168.100.32:3000";
+  //final urlApi = "https://flomreadmysqlbackend-production.up.railway.app";
   final _dio = Dio();
 
   Future<List<Lector>> getLectores() async {
@@ -69,5 +69,18 @@ class LectorAPI {
     });
 
     return Comentario.fromMap(response.data);
+  }
+
+  Future<Comentario> comentariosByIdPrestamo(int idPrestamo) async {
+    try {
+      final Response response = await _dio.get('$urlApi/Comentario/prestamo/$idPrestamo');
+      return Comentario.fromMap(response.data);
+    } catch (e) {
+      if (e is DioError) {
+        return Future.error(e.response!.data["message"]);
+      } else {
+        return Future.error(e.toString());
+      }
+    }
   }
 }

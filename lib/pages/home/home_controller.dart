@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flomreadapp/core/api/lector_api.dart';
 import 'package:flomreadapp/core/models/prestamo_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,6 +20,8 @@ class HomeController extends GetxController {
   final bool _loading = true;
   late Lector _lector = Lector();
   String? _descripcion;
+  TextEditingController _descripcionController = TextEditingController();
+  bool _showButton = false;
 
   bool get loading => _loading;
   int get counter => _counter;
@@ -27,6 +31,8 @@ class HomeController extends GetxController {
   List<Prestamo> get prestamosLeidos => _prestamosLeidos;
   List<Prestamo> get prestamosSin => _prestamosSin;
   String? get descripcion => _descripcion;
+  TextEditingController get descripcionController => _descripcionController;
+  bool get showButton => _showButton;
 
   @override
   void onInit() {
@@ -65,6 +71,23 @@ class HomeController extends GetxController {
     update();
   }
 
+  Future<void> loadComentario(int idPrestamo) async {
+    descripcionController.text = '';
+    _descripcion = '';
+    try {
+      final data = await LectorAPI.instance.comentariosByIdPrestamo(idPrestamo);
+      inspect(data);
+      _descripcion = data.descripcion;
+      _descripcionController.text = _descripcionController.text + _descripcion!;
+      _showButton = false;
+      update();
+    } catch (e) {
+      print(e);
+      _showButton = true;
+      update();
+    }
+  }
+
   Future<void> loadLectoresById() async {
     final data = await LectorAPI.instance.getLectorById(1);
     _lector = data;
@@ -84,6 +107,7 @@ class HomeController extends GetxController {
 
   setDescripcion(descripcion) {
     _descripcion = descripcion;
+    //descripcionController.text = descripcion!;
     print(_descripcion);
     update();
   }
