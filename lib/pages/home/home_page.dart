@@ -6,8 +6,6 @@ import 'package:get/get.dart';
 import 'package:animated_segmented_tab_control/animated_segmented_tab_control.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
@@ -21,12 +19,21 @@ class HomePage extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                  onPressed: () => {Get.offAll(const LoginPage())},
-                  icon:
-                      const Icon(Icons.logout, color: Colors.black, size: 30)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                    onPressed: () => {_.refrescarDatos()},
+                    icon: const Icon(Icons.refresh,
+                        color: Colors.black, size: 30)),
+                IconButton(
+                    onPressed: () => {cambiarClave()},
+                    icon: const Icon(Icons.key, color: Colors.black, size: 30)),
+                IconButton(
+                    onPressed: () => {Get.offAll(const LoginPage())},
+                    icon: const Icon(Icons.logout,
+                        color: Colors.black, size: 30)),
+              ],
             ),
             const SizedBox(
               height: 10,
@@ -131,18 +138,23 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                height: 220,
-                width: MediaQuery.of(context).size.width * 0.4,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(controller.lector.fotoPerfil != '' &&
-                            controller.lector.fotoPerfil != null
-                        ? controller.lector.fotoPerfil
-                        : 'https://previews.123rf.com/images/dolgachov/dolgachov1711/dolgachov171101175/89513306-ni%C3%B1o-estudiante-feliz-escribiendo-en-el-cuaderno-en-casa.jpg'),
-                    fit: BoxFit.cover,
+              GestureDetector(
+                onTap: () => {
+                  controller.cambiarFoto(),
+                },
+                child: Container(
+                  height: 220,
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(controller.lector.fotoPerfil != '' &&
+                              controller.lector.fotoPerfil != null
+                          ? controller.lector.fotoPerfil
+                          : 'https://previews.123rf.com/images/dolgachov/dolgachov1711/dolgachov171101175/89513306-ni%C3%B1o-estudiante-feliz-escribiendo-en-el-cuaderno-en-casa.jpg'),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                  borderRadius: BorderRadius.circular(20),
                 ),
               )
             ],
@@ -180,7 +192,7 @@ class HomePage extends StatelessWidget {
     return GestureDetector(
       onTap: () => {
         homeController.loadComentario(prestamo.id),
-        Comentario(context, prestamo, homeController),
+        comentario(context, prestamo),
       },
       child: Container(
         width: Get.width * 0.9,
@@ -221,8 +233,8 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Comentario(context, prestamo, HomeController homeController) async {
-    await showModalBottomSheet<void>(
+  comentario(context, prestamo) {
+    showModalBottomSheet<void>(
       shape: ShapeBorder.lerp(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -234,108 +246,189 @@ class HomePage extends StatelessWidget {
       isScrollControlled: true,
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Color.fromARGB(255, 247, 247, 247),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          height: Get.height * 0.8,
-          child: Padding(
-            padding: const EdgeInsets.all(15),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(prestamo.libro.nombre.toString(),
-                    style: TextStyle(
-                        fontSize: Get.width * 0.08,
-                        fontWeight: FontWeight.bold)),
-                SizedBox(height: Get.height * 0.02),
-                CupertinoTextField(
-                  textInputAction: TextInputAction.next,
-                  onChanged: (value) => {homeController.setDescripcion(value)},
-                  controller: (homeController.showButton == false
-                      ? homeController.descripcionController
-                      : null),
-                  maxLength: 900,
-                  minLines: 20,
-                  placeholder: 'Comentario',
-                  maxLines: 20,
+        return GetBuilder<HomeController>(
+            init: HomeController(),
+            builder: (_) => Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 247, 247, 247),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                ),
-                SizedBox(height: Get.height * 0.02),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    MaterialButton(
-                      color: Colors.red,
-                      shape: ShapeBorder.lerp(
-                          RoundedRectangleBorder(
+                  height: Get.height * 0.8,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(prestamo.libro.nombre.toString(),
+                            style: TextStyle(
+                                fontSize: Get.width * 0.08,
+                                fontWeight: FontWeight.bold)),
+                        SizedBox(height: Get.height * 0.02),
+                        CupertinoTextField(
+                          textInputAction: TextInputAction.next,
+                          onChanged: (value) => {_.setDescripcion(value)},
+                          controller: _.descripcionController,
+                          maxLength: 900,
+                          minLines: 20,
+                          placeholder: 'Comentario',
+                          maxLines: 20,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          1),
-                      child: Row(
-                        children: const [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 5.0),
-                            child: Text(
-                              'Cancelar',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          Icon(Icons.cancel, color: Colors.white),
-                        ],
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                    FutureBuilder(
-                      future: null,
-                      builder: (BuildContext context,
-                          AsyncSnapshot<dynamic> snapshot) {
-                        if (homeController.showButton == true) {
-                          return MaterialButton(
-                            color: Colors.green,
-                            shape: ShapeBorder.lerp(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                1),
-                            child: Row(
-                              children: const [
-                                Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 5.0),
-                                  child: Text(
-                                    'Comentar',
-                                    style: TextStyle(color: Colors.white),
+                        ),
+                        SizedBox(height: Get.height * 0.02),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            MaterialButton(
+                              color: Colors.red,
+                              shape: ShapeBorder.lerp(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
-                                ),
-                                Icon(Icons.check, color: Colors.white),
-                              ],
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  1),
+                              child: Row(
+                                children: const [
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 5.0),
+                                    child: Text(
+                                      'Cancelar',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                  Icon(Icons.cancel, color: Colors.white),
+                                ],
+                              ),
+                              onPressed: () => Navigator.pop(context),
                             ),
-                            onPressed: () => Navigator.pop(context),
-                          );
-                        } else {
-                          return Text('');
-                        }
-                      },
+                            !!_.showButton
+                                ? MaterialButton(
+                                    color: Colors.green,
+                                    shape: ShapeBorder.lerp(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        1),
+                                    child: Row(
+                                      children: const [
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 5.0),
+                                          child: Text(
+                                            'Comentar',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                        Icon(Icons.check, color: Colors.white),
+                                      ],
+                                    ),
+                                    onPressed: () => Navigator.pop(context),
+                                  )
+                                : Text('')
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                ));
+      },
+    );
+  }
+
+  void cambiarClave() {
+    final homeController = Get.put(HomeController());
+
+    Get.defaultDialog(
+      barrierDismissible: false,
+      title: 'Cambiar clave',
+      content: Column(
+        children: [
+          CupertinoTextField(
+            textInputAction: TextInputAction.next,
+            controller: homeController.claveController,
+            maxLength: 900,
+            minLines: 1,
+            placeholder: 'Clave',
+            maxLines: 1,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
             ),
           ),
-        );
-      },
+        ],
+      ),
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            MaterialButton(
+                color: Colors.red,
+                shape: ShapeBorder.lerp(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    1),
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5.0),
+                      child: Text(
+                        'Cancelar',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    Icon(Icons.cancel, color: Colors.white),
+                  ],
+                ),
+                onPressed: () => {
+                      Get.back(),
+                      homeController.claveController.text = '',
+                    }),
+            MaterialButton(
+              color: Colors.green,
+              shape: ShapeBorder.lerp(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  1),
+              child: Row(
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5.0),
+                    child: Text(
+                      'Cambiar',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  Icon(Icons.check, color: Colors.white),
+                ],
+              ),
+              onPressed: () => {
+                homeController.cambiarClave(),
+                Get.back(),
+              },
+            )
+          ],
+        )
+      ],
     );
   }
 }

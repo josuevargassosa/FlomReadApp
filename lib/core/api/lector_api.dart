@@ -13,8 +13,8 @@ class LectorAPI {
 
   static LectorAPI get instance => _instance;
 
-  final urlApi = "http://192.168.100.32:3000";
-  //final urlApi = "https://flomreadmysqlbackend-production.up.railway.app";
+  //final urlApi = "http://192.168.100.32:3000";
+  final urlApi = "https://flomreadmysqlbackend-production.up.railway.app";
   final _dio = Dio();
 
   Future<List<Lector>> getLectores() async {
@@ -73,8 +73,54 @@ class LectorAPI {
 
   Future<Comentario> comentariosByIdPrestamo(int idPrestamo) async {
     try {
-      final Response response = await _dio.get('$urlApi/Comentario/prestamo/$idPrestamo');
+      final Response response =
+          await _dio.get('$urlApi/Comentario/prestamo/$idPrestamo');
       return Comentario.fromMap(response.data);
+    } catch (e) {
+      if (e is DioError) {
+        return Future.error(e.response!.data["message"]);
+      } else {
+        return Future.error(e.toString());
+      }
+    }
+  }
+
+  Future<dynamic> cambiarClave(data) async {
+    try {
+      final Response response =
+          await _dio.post('$urlApi/auth/cambiar-clave', data: data);
+
+      return response.data;
+    } catch (e) {
+      if (e is DioError) {
+        return Future.error(e.response!.data["message"]);
+      } else {
+        return Future.error(e.toString());
+      }
+    }
+  }
+
+  Future<dynamic> uploadPhoto(data) async {
+    try {
+      final Response response =
+          await _dio.post('$urlApi/lector/cargar-foto', data: data);
+
+      return response.data;
+    } catch (e) {
+      if (e is DioError) {
+        return Future.error(e.response!.data["message"]);
+      } else {
+        return Future.error(e.toString());
+      }
+    }
+  }
+
+  Future<dynamic> actualizarFoto(int id, foto) async {
+    try {
+      final Response response =
+          await _dio.put('$urlApi/lector/actualizar-foto/$id', data: foto);
+
+      return response.data;
     } catch (e) {
       if (e is DioError) {
         return Future.error(e.response!.data["message"]);

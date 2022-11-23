@@ -43,7 +43,7 @@ class LoginController extends GetxController {
   Future<void> login(Credentials credencial) async {
     try {
       final data = await LectorAPI.instance.login(credencial);
-      Get.to(const HomePage(), arguments: data);
+      Get.to(HomePage(), arguments: data);
     } catch (e) {
       print(e);
       _loginMessageFail = e.toString();
