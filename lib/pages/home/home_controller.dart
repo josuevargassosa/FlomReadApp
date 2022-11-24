@@ -143,7 +143,7 @@ class HomeController extends GetxController {
     if (image != null) {
       var formData = FormData.fromMap({
         "nombre": lector.nombres,
-        "file": await MultipartFile.fromFile(image!.path),
+        "file": await MultipartFile.fromFile(image.path),
       });
       try {
         final data = await LectorAPI.instance.uploadPhoto(formData);
