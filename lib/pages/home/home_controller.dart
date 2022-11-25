@@ -71,6 +71,9 @@ class HomeController extends GetxController {
   }
 
   Future<void> loadPrestamos() async {
+    _prestamos.clear();
+    _prestamosLeidos.clear();
+    _prestamosSin.clear();
     final data = await LectorAPI.instance.prestamosByIdLector(_lector.id!);
     _prestamos = data;
     loadPrestamosLeidos();
@@ -107,6 +110,7 @@ class HomeController extends GetxController {
       idLibro: prestamo.idLibro,
     );
     final data = await LectorAPI.instance.postComentario(comentario);
+    refrescarDatos();
     update();
   }
 
@@ -130,8 +134,6 @@ class HomeController extends GetxController {
 
   refrescarDatos() async {
     await loadPrestamos();
-    await loadPrestamosLeidos();
-    await loadPrestamosSin();
     await loadLectoresById();
     update();
   }

@@ -334,7 +334,11 @@ class HomePage extends StatelessWidget {
                                         Icon(Icons.check, color: Colors.white),
                                       ],
                                     ),
-                                    onPressed: () => Navigator.pop(context),
+                                    onPressed: () => {
+                                      _.postComentario(prestamo),
+                                      Navigator.pop(context),
+                                    }
+                                      
                                   )
                                 : Text('')
                           ],
